@@ -317,6 +317,12 @@ def get_alerts_for_roles(user: str, alerts: list, parents: list):
 
 # [Internal]
 def get_alerts_seen_by(alerts: list, user: str=None):
+
+    if isinstance(alerts, str):
+        alerts = [alerts]
+    elif not isinstance(alerts, list):
+        alerts = list(alerts)
+
     dt = f"{_ALERT_DT_} Seen By"
     doc = frappe.qb.DocType(dt)
     qry = (
@@ -338,7 +344,7 @@ def get_alerts_seen_by(alerts: list, user: str=None):
 
 # [Internal]
 def filter_seen_alerts(data: list, user: str, alerts: list, today: str):
-    seen_by = get_alerts_seen_by(user, alerts)
+    seen_by = get_alerts_seen_by(alerts=alerts, user=user)
     if not seen_by:
         return data
     
